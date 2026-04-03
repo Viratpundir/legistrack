@@ -1,9 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LegisTrack</title>
+
+<style>
+.status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    color: white;
+    margin-top: 5px;
+}
+
+.status-1 { background: #9e9e9e; }
+.status-2 { background: #2196f3; }
+.status-3 { background: #ff9800; }
+.status-4 { background: #9c27b0; }
+.status-5 { background: #4caf50; }
+
+.likelihood { margin-top: 8px; }
+
+.progress-bar {
+    height: 6px;
+    border-radius: 5px;
+    background: #ddd;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #4caf50;
+}
+
+body {
+    font-family: Arial;
+    margin: 0;
+    background: #f5f5f5;
+}
+
+.header {
+    background: #0a0e1a;
+    color: white;
+    padding: 15px 30px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.toolbar {
+    padding: 20px;
+    background: #fff;
+    display: flex;
+    gap: 10px;
+}
+
+input, select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.bills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.bill-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.bill-card:hover { transform: scale(1.02); }
+
+.bill-title { font-weight: bold; margin: 10px 0; }
+
+.bill-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.bill-card.expanded .bill-details {
+    max-height: 600px;
+}
+
+.score-section { margin-top: 10px; }
+
+.score-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.bar {
+    height: 6px;
+    background: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.fill { height: 100%; background: #4caf50; }
+
+.assign { background: #2196f3; color: white; }
+.task { background: #ff9800; color: white; }
+.review { background: #4caf50; color: white; }
+</style>
+</head>
+
+<body>
+
+<div class="header">⚖️ LegisTrack</div>
+
+<div class="toolbar">
+    <input id="searchInput" placeholder="Search..." oninput="searchBills()">
+</div>
+
+<div id="mainContent"></div>
+
 <script>
 let bills = [];
 let filteredBills = [];
 let expandedIndex = null;
 
-// LOAD DATA
 window.onload = async () => {
     const res = await fetch('/api/bills/');
     bills = await res.json();
@@ -11,58 +137,44 @@ window.onload = async () => {
     renderBills();
 };
 
-// SCORE CALCULATION
-function calculateScore(b) {
-    const status = Number(b.status);
-    const base = getProbability(status);
-
-    const impact = Math.min(90, base + 20);
-    const penalty = Math.min(85, base + 15);
-    const urgency = Math.min(80, base + 10);
-    const relevance = Math.min(70, base);
-
-    const total = Math.round((impact + penalty + urgency + relevance) / 4);
-
-    return { impact, penalty, urgency, relevance, total };
+function getProbability(status){
+    return {1:20,2:40,3:65,4:85,5:100}[status] || 0;
 }
 
-// RENDER
-function renderBills() {
-    const container = document.getElementById('mainContent');
+function calculateScore(b){
+    const base = getProbability(Number(b.status));
+    return {
+        impact: Math.min(90, base+20),
+        penalty: Math.min(85, base+15),
+        urgency: Math.min(80, base+10),
+        relevance: Math.min(70, base),
+        total: base
+    };
+}
 
-    if (!filteredBills.length) {
-        container.innerHTML = "<p style='padding:20px'>No bills found</p>";
-        return;
-    }
-
+function renderBills(){
     let html = "<div class='bills-grid'>";
 
-    filteredBills.forEach((b, index) => {
+    filteredBills.forEach((b,i)=>{
         const status = Number(b.status);
         const score = calculateScore(b);
 
         html += `
-        <div class="bill-card ${expandedIndex === index ? 'expanded' : ''}" 
-             onclick="toggleCard(${index})">
+        <div class="bill-card ${expandedIndex===i?'expanded':''}" onclick="toggleCard(${i})">
 
-            <div class="bill-number">${b.bill_number} (${b.state})</div>
+            <div>${b.bill_number} (${b.state})</div>
             <div class="bill-title">${b.title}</div>
 
-            <div class="bill-meta">
-                <span class="status-badge status-${status}">
-                    ${getStatus(status)}
-                </span><br>
-                Date: ${b.last_action_date || 'N/A'}
-            </div>
+            <span class="status-badge status-${status}">
+                ${getStatus(status)}
+            </span>
 
-            <!-- ✅ IMPACT SHOWN BEFORE EXPAND -->
-            <div style="margin-top:8px; font-size:13px;">
-                <b>Impact:</b> ${score.impact}
-            </div>
+            <!-- ✅ IMPACT BEFORE EXPAND -->
+            <div><b>Impact:</b> ${score.impact}</div>
 
-            <!-- ✅ RENAMED -->
+            <!-- ✅ PASSING PROBABILITY -->
             <div class="likelihood">
-                <small><b>Passing Probability: ${getProbability(status)}%</b></small>
+                <small>Passing Probability: ${getProbability(status)}%</small>
                 <div class="progress-bar">
                     <div class="progress-fill" style="width:${getProbability(status)}%"></div>
                 </div>
@@ -71,102 +183,59 @@ function renderBills() {
             <div class="bill-details">
                 <hr>
 
-                <b>Priority Score:</b> 
-                <span style="color:${score.total > 80 ? 'red' : 'orange'}">
-                    ${score.total} 🔴
-                </span> (RCO)
+                <b>Priority Score: ${score.total}</b>
 
                 <div class="score-section">
-
-                    <div class="score-row">Impact <span>${score.impact}</span></div>
+                    <div class="score-row">Impact ${score.impact}</div>
                     <div class="bar"><div class="fill" style="width:${score.impact}%"></div></div>
 
-                    <div class="score-row">Penalty <span>${score.penalty}</span></div>
+                    <div class="score-row">Penalty ${score.penalty}</div>
                     <div class="bar"><div class="fill" style="width:${score.penalty}%"></div></div>
 
-                    <div class="score-row">Urgency <span>${score.urgency}</span></div>
+                    <div class="score-row">Urgency ${score.urgency}</div>
                     <div class="bar"><div class="fill" style="width:${score.urgency}%"></div></div>
 
-                    <div class="score-row">Relevance <span>${score.relevance}</span></div>
+                    <div class="score-row">Relevance ${score.relevance}</div>
                     <div class="bar"><div class="fill" style="width:${score.relevance}%"></div></div>
-
                 </div>
 
-                <div class="explanation">
+                <div>
                     <b>Explanation:</b><br>
                     - Applies to ${b.state}<br>
-                    - Status: ${getStatus(status)}<br>
-                    - Likely compliance impact<br>
+                    - Status: ${getStatus(status)}
                 </div>
 
-                <div class="action-buttons">
-                    <button class="assign">Assign Owner</button>
-                    <button class="task">Create Task</button>
-                    <button class="review">Mark Reviewed</button>
+                <div>
+                    <button class="assign">Assign</button>
+                    <button class="task">Task</button>
+                    <button class="review">Reviewed</button>
                 </div>
-
             </div>
+
         </div>`;
     });
 
     html += "</div>";
-    container.innerHTML = html;
+    document.getElementById("mainContent").innerHTML = html;
 }
 
-// TOGGLE
-function toggleCard(index) {
-    expandedIndex = expandedIndex === index ? null : index;
+function toggleCard(i){
+    expandedIndex = expandedIndex===i ? null : i;
     renderBills();
 }
 
-// SEARCH
-function searchBills() {
-    const query = document.getElementById("searchInput").value.toLowerCase();
-
+function searchBills(){
+    const q = document.getElementById("searchInput").value.toLowerCase();
     filteredBills = bills.filter(b =>
-        (b.title || "").toLowerCase().includes(query) ||
-        (b.bill_number || "").toLowerCase().includes(query)
+        (b.title||"").toLowerCase().includes(q)
     );
-
-    expandedIndex = null;
     renderBills();
 }
 
-// FILTER
-function filterBills() {
-    const state = document.getElementById("stateFilter").value;
-    const status = document.getElementById("statusFilter").value;
-
-    filteredBills = bills.filter(b => {
-        return (!state || b.state === state) &&
-               (!status || Number(b.status) == Number(status));
-    });
-
-    expandedIndex = null;
-    renderBills();
-}
-
-// STATUS TEXT
-function getStatus(status) {
-    const map = {
-        1: "Prefiled",
-        2: "Introduced",
-        3: "Engrossed",
-        4: "Enrolled",
-        5: "Passed"
-    };
-    return map[status] || "Unknown";
-}
-
-// ✅ RENAMED FUNCTION
-function getProbability(status) {
-    const map = {
-        1: 20,
-        2: 40,
-        3: 65,
-        4: 85,
-        5: 100
-    };
-    return map[status] || 0;
+function getStatus(s){
+    return {1:"Prefiled",2:"Introduced",3:"Engrossed",4:"Enrolled",5:"Passed"}[s];
 }
 </script>
+
+</body>
+</html>
