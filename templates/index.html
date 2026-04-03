@@ -3,38 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Compliance Dashboard</title>
+<title>LegisTrack Dashboard</title>
 
 <style>
 body {
     font-family: Arial, sans-serif;
-    background: #f5f6fa;
-    margin: 0;
+    background: #f4f6fb;
     padding: 20px;
 }
 
-/* CONTAINER */
-.dashboard {
-    max-width: 800px;
-    margin: auto;
-}
-
-/* CARD */
+/* CARD BASE */
 .card {
-    background: white;
+    background: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
     overflow: hidden;
 }
 
 /* HEADER */
-.card-header {
+.header {
     background: #0a0e1a;
     color: white;
     padding: 12px 20px;
     font-weight: bold;
-    display: flex;
-    justify-content: space-between;
 }
 
 /* PRIORITY BAR */
@@ -42,17 +34,17 @@ body {
     display: flex;
     justify-content: space-around;
     padding: 15px;
-    font-weight: bold;
     border-bottom: 1px solid #eee;
+    font-weight: bold;
 }
 
-.priority-high { color: #e53935; }
-.priority-medium { color: #fbc02d; }
-.priority-low { color: #43a047; }
+.high { color: #e53935; }
+.medium { color: #fbc02d; }
+.low { color: #43a047; }
 
 /* SECTION TITLE */
 .section-title {
-    padding: 15px 20px;
+    padding: 12px 20px;
     font-weight: bold;
     border-bottom: 1px solid #eee;
 }
@@ -68,81 +60,134 @@ body {
 }
 
 .score {
-    font-weight: bold;
     margin-top: 5px;
+    font-weight: bold;
 }
 
-.score.high { color: #e53935; }
-.score.medium { color: #fbc02d; }
-.score.low { color: #43a047; }
-
-/* ACTIONS */
-.actions {
+/* BUTTONS */
+.actions button {
     margin-top: 8px;
-}
-
-button {
-    padding: 5px 10px;
+    margin-right: 8px;
+    padding: 6px 10px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    margin-right: 5px;
 }
 
-.view-btn {
-    background: #2196f3;
-    color: white;
+.view { background: #2196f3; color: white; }
+.assign { background: #4caf50; color: white; }
+.task { background: #ff9800; color: white; }
+.review { background: #9c27b0; color: white; }
+
+/* DETAIL CARD */
+.detail-section {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
 }
 
-.assign-btn {
+/* PROGRESS BAR */
+.bar {
+    background: #ddd;
+    height: 8px;
+    border-radius: 5px;
+    margin: 5px 0;
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
     background: #4caf50;
-    color: white;
+}
+
+/* EXPLANATION */
+.explanation {
+    font-size: 14px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="dashboard">
+<!-- ================= DASHBOARD CARD ================= -->
+<div class="card">
 
-    <div class="card">
+    <div class="header">
+        Persona: [RCO ▼]
+    </div>
 
-        <!-- HEADER -->
-        <div class="card-header">
-            <span>Persona: [RCO ▼]</span>
+    <div class="priority-bar">
+        <span class="high">🔴 High (12)</span>
+        <span class="medium">🟡 Medium (34)</span>
+        <span class="low">🟢 Low (120)</span>
+    </div>
+
+    <div class="section-title">
+        Top Priorities (Auto-ranked)
+    </div>
+
+    <div class="bill-item">
+        <div class="bill-title">1. Data Privacy Bill - California</div>
+        <div class="score high">Score: 92 🔴</div>
+        <div>Why: High penalty + Effective in 30 days</div>
+
+        <div class="actions">
+            <button class="view">View</button>
+            <button class="assign">Assign</button>
         </div>
+    </div>
 
-        <!-- PRIORITY SUMMARY -->
-        <div class="priority-bar">
-            <span class="priority-high">🔴 High (12)</span>
-            <span class="priority-medium">🟡 Medium (34)</span>
-            <span class="priority-low">🟢 Low (120)</span>
-        </div>
+    <div class="bill-item">
+        <div class="bill-title">2. Tax Amendment - Texas</div>
+        <div class="score high">Score: 88 🔴</div>
+        <div>Why: High impact + Passed stage</div>
+    </div>
 
-        <!-- SECTION -->
-        <div class="section-title">
-            Top Priorities (Auto-ranked)
-        </div>
+</div>
 
-        <!-- ITEM 1 -->
-        <div class="bill-item">
-            <div class="bill-title">1. Data Privacy Bill - California</div>
-            <div class="score high">Score: 92 🔴</div>
-            <div>Why: High penalty + Effective in 30 days</div>
 
-            <div class="actions">
-                <button class="view-btn">View</button>
-                <button class="assign-btn">Assign</button>
-            </div>
-        </div>
+<!-- ================= DETAIL CARD ================= -->
+<div class="card">
 
-        <!-- ITEM 2 -->
-        <div class="bill-item">
-            <div class="bill-title">2. Tax Amendment - Texas</div>
-            <div class="score high">Score: 88 🔴</div>
-            <div>Why: High impact + Passed stage</div>
-        </div>
+    <div class="header">
+        Bill: CA Data Privacy Act Amendment
+    </div>
 
+    <div class="detail-section">
+        <b>Priority Score: <span class="high">92 🔴 (RCO)</span></b>
+    </div>
+
+    <div class="detail-section">
+        <b>Score Breakdown:</b><br><br>
+
+        Impact
+        <div class="bar"><div class="fill" style="width:90%"></div></div>
+        90<br><br>
+
+        Penalty
+        <div class="bar"><div class="fill" style="width:85%"></div></div>
+        85<br><br>
+
+        Urgency
+        <div class="bar"><div class="fill" style="width:80%"></div></div>
+        80<br><br>
+
+        Relevance
+        <div class="bar"><div class="fill" style="width:70%"></div></div>
+        70
+    </div>
+
+    <div class="detail-section explanation">
+        <b>Explanation:</b><br>
+        - Applies to active market (CA)<br>
+        - Introduces new reporting obligations<br>
+        - Effective in 30 days
+    </div>
+
+    <div class="detail-section">
+        <b>Actions:</b><br><br>
+        <button class="assign">Assign Owner</button>
+        <button class="task">Create Task</button>
+        <button class="review">Mark Reviewed</button>
     </div>
 
 </div>
