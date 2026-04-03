@@ -1,21 +1,21 @@
-bill_number,state,title,status,last_action_date
-HB101,CA,Health Insurance Premium Regulation Act,2,2025-01-10
-SB202,TX,Auto Insurance Rate Transparency Bill,5,2025-02-15
-HB303,FL,Medicaid Coverage Expansion Act,2,2025-03-05
-SB404,NY,Life Insurance Consumer Protection Law,3,2025-01-25
-HB505,PA,Property Insurance Disaster Coverage Bill,4,2025-02-12
-SB606,IL,Insurance Fraud Prevention Enhancement Act,2,2025-03-20
-HB707,GA,Health Insurance Network Adequacy Law,5,2025-02-01
-SB808,NC,Auto Claims Processing Reform Act,3,2025-03-10
-HB909,MI,Insurance Data Privacy Protection Bill,2,2025-01-30
-SB010,NJ,Life Insurance Disclosure Requirements Act,5,2025-02-28
-HB111,WA,Medicare Supplement Policy Reform Act,2,2025-03-18
-SB212,CO,Insurance Premium Cap Regulation Bill,4,2025-01-22
-HB313,MN,Healthcare Insurance Accessibility Act,2,2025-02-17
-SB414,VA,Auto Liability Coverage Increase Bill,5,2025-03-02
-HB515,AZ,Insurance Market Competition Law,3,2025-02-08
-SB616,OH,Health Claims Transparency Act,2,2025-03-12
-HB717,MA,Insurance Policyholder Protection Act,4,2025-01-19
-SB818,OR,Auto Insurance Minimum Coverage Update,5,2025-02-23
-HB919,NV,Insurance Fraud Reporting Requirements Bill,2,2025-03-14
-SB020,UT,Health Insurance Cost Reduction Act,3,2025-01-27
+bill_id,bill_number,title,state,status,last_action_date,description,sponsor,last_action
+1001,AB101,Healthcare Reform Act,CA,2,2025-03-10,Improves healthcare access across the state,John Smith,Referred to Health Committee
+1002,SB202,Insurance Transparency Bill,TX,3,2025-02-18,Ensures transparency in insurance pricing,Mary Johnson,Passed Senate
+1003,HB303,Education Funding Bill,FL,1,2025-01-25,Allocates funds for public schools,David Lee,Introduced in House
+1004,AB404,Environmental Protection Act,NY,5,2025-03-01,Strengthens environmental regulations,Sarah Brown,Signed into law
+1005,SB505,Tax Reduction Bill,CA,4,2025-02-28,Reduces small business taxes,Michael White,Sent to Governor
+1006,HB606,Digital Privacy Act,TX,2,2025-03-05,Protects user data privacy,Emma Davis,Under review
+1007,AB707,Transportation Improvement Bill,FL,3,2025-02-20,Improves road infrastructure,Chris Wilson,Passed House
+1008,SB808,Energy Efficiency Act,NY,2,2025-01-30,Promotes renewable energy use,Olivia Taylor,In committee
+1009,HB909,Housing Development Bill,CA,1,2025-03-12,Supports affordable housing,Daniel Martinez,Introduced
+1010,AB010,Public Safety Reform,TX,5,2025-02-15,Enhances law enforcement policies,Sophia Anderson,Approved
+1011,SB111,Water Conservation Act,FL,2,2025-03-03,Encourages efficient water usage,James Thomas,Committee review
+1012,HB222,Small Business Support Bill,NY,3,2025-02-10,Provides funding to startups,Isabella Jackson,Passed Assembly
+1013,AB333,AI Regulation Act,CA,2,2025-03-14,Regulates artificial intelligence systems,Ethan Harris,Under discussion
+1014,SB444,Healthcare Insurance Expansion,TX,4,2025-02-25,Expands coverage options,Ava Martin,Sent to Governor
+1015,HB555,Education Reform Act,FL,1,2025-01-18,Improves school curriculum standards,Lucas Thompson,Introduced
+1016,AB666,Green Energy Subsidy Bill,NY,5,2025-03-08,Supports renewable energy companies,Mia Garcia,Approved
+1017,SB777,Cybersecurity Enhancement Act,CA,3,2025-02-22,Improves national cybersecurity,Noah Rodriguez,Passed Senate
+1018,HB888,Urban Development Bill,TX,2,2025-03-06,Develops smart cities infrastructure,Charlotte Lewis,In committee
+1019,AB999,Food Safety Regulation,FL,4,2025-02-27,Ensures food quality standards,Benjamin Walker,Sent to Governor
+1020,SB000,Climate Change Action Plan,NY,5,2025-03-11,Addresses climate change policies,Amelia Hall,Signed into law

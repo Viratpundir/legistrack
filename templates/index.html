@@ -75,6 +75,38 @@ button {
     font-size: 12px;
     color: gray;
 }
+.bill-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bill-card:hover {
+    transform: scale(1.02);
+}
+
+.bill-details {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #333;
+    display: none;
+}
+
+.bill-card.expanded .bill-details {
+    display: block;
+}
+.bill-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.bill-card.expanded .bill-details {
+    max-height: 500px;
+}
 </style>
 </head>
 
@@ -130,14 +162,21 @@ function renderBills() {
 
     let html = "<div class='bills-grid'>";
 
-    filteredBills.forEach(b => {
+    filteredBills.forEach((b, index) => {
         html += `
-        <div class="bill-card">
+        <div class="bill-card" onclick="toggleCard(${index})">
             <div class="bill-number">${b.bill_number} (${b.state})</div>
             <div class="bill-title">${b.title}</div>
             <div class="bill-meta">
                 Status: ${getStatus(b.status)}<br>
                 Date: ${b.last_action_date}
+            </div>
+
+            <div class="bill-details" id="details-${index}">
+                <hr>
+                <b>Description:</b> ${b.description || "No description"}<br><br>
+                <b>Sponsor:</b> ${b.sponsor || "Unknown"}<br><br>
+                <b>Last Action:</b> ${b.last_action || "N/A"}<br>
             </div>
         </div>`;
     });
@@ -181,6 +220,20 @@ function getStatus(status) {
         5: "Passed"
     };
     return map[status] || "Unknown";
+}
+function toggleCard(index) {
+    const cards = document.querySelectorAll('.bill-card');
+    const selectedCard = cards[index];
+
+    // Close others (optional, for cleaner UX)
+    cards.forEach((card, i) => {
+        if (i !== index) {
+            card.classList.remove('expanded');
+        }
+    });
+
+    // Toggle clicked one
+    selectedCard.classList.toggle('expanded');
 }
 </script>
 
